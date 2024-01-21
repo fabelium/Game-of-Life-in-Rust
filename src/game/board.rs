@@ -15,11 +15,10 @@ impl Board {
 
     pub fn set_initial_state(&mut self) {
         let mut rng = thread_rng();
-
-        for y in 0..self.height {
-            for x in 0..self.width {
+        for x in 0..self.width {
+            for y in 0..self.height {
                 let alive = rng.gen_bool(0.5);
-                self.cells[y][x] = if alive { Cell::Alive } else { Cell::Dead };
+                self.cells[x][y] = if alive { Cell::Alive } else { Cell::Dead };
             }
         }
     }
