@@ -22,7 +22,7 @@ Before you can run this project, you need to have Rust and Cargo (Rust's package
 First, clone the repository to your local machine:
 
 ```
-git clone https://github.com/your-username/Game-of-Life-in-Rust.git
+git clone https://github.com/fabelium/Game-of-Life-in-Rust.git
 cd Game-of-Life-in-Rust
 ```
 
