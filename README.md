@@ -10,6 +10,9 @@ In the Game of Life, each cell in a two-dimensional grid can be in one of two st
 
 This project implements these rules and provides a basic visualization of the game board.
 
+## Modular Design
+The project is divided into two main components: GameState for handling the game logic, and GameView for managing the rendering. GameState contains the core rules and state of the game, while GameView is focused on presenting this state to the user.
+
 ## Technologies Used
 - Rust
 
