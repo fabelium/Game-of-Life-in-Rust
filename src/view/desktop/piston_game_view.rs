@@ -1,4 +1,4 @@
-use crate::views::game_view_trait::GameViewTrait;
+use crate::view::game_view_trait::GameViewTrait;
 use std::time::{Duration, Instant};
 use opengl_graphics::GlGraphics;
 use piston_window::{Events, EventSettings, OpenGL, PistonWindow, RenderArgs, RenderEvent, WindowSettings};

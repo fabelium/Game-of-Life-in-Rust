@@ -1,9 +1,9 @@
 mod game;
-mod views;
+mod view;
 
 use crate::game::game_state::GameState;
-use crate::views::desktop::piston_game_view::PistonGameView;
-use crate::views::game_view_trait::GameViewTrait;
+use crate::view::desktop::piston_game_view::PistonGameView;
+use crate::view::game_view_trait::GameViewTrait;
 
 fn main() {
     let initial_alive_probability = 0.1;

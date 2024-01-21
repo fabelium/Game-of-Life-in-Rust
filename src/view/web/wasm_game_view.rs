@@ -1,7 +1,7 @@
 use std::time::{Duration};
 use piston_window::RenderArgs;
 use crate::game::game_state::GameState;
-use crate::views::game_view_trait::GameViewTrait;
+use crate::view::game_view_trait::GameViewTrait;
 
 pub struct WasmGameView {
     game_state: GameState,
