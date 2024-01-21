@@ -1,5 +1,6 @@
 use crate::game::cell::Cell;
 use rand::{thread_rng, Rng};
+use crate::game::rules::evolve_cell;
 
 pub struct Board {
     pub width: usize,
@@ -36,12 +37,7 @@ impl Board {
             for x in 0..self.width {
                 let alive_neighbors = self.count_alive_neighbors(x, y);
 
-                let new_cell = match (self.cells[y][x], alive_neighbors) {
-                    (Cell::Dead, 3) => Cell::Alive,
-                    (Cell::Alive, 2) => Cell::Alive,
-                    (Cell::Alive, 3) => Cell::Alive,
-                    _ => Cell::Dead,
-                };
+                let new_cell = evolve_cell(self.cells[y][x], alive_neighbors);
 
                 new_state[y][x] = new_cell;
             }
