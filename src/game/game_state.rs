@@ -12,8 +12,8 @@ impl GameState {
         }
     }
 
-    pub fn init(&mut self) {
-        self.board.set_initial_state();
+    pub fn init(&mut self, initial_alive_probability: f64) {
+        self.board.set_initial_state(initial_alive_probability);
         self.board.set_cell_state(53, 53, Cell::Alive);
         self.board.set_cell_state(54, 53, Cell::Alive);
     }

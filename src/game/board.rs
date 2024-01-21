@@ -13,11 +13,11 @@ impl Board {
         Board { width, height, cells }
     }
 
-    pub fn set_initial_state(&mut self) {
+    pub fn set_initial_state(&mut self, initial_alive_probability: f64) {
         let mut rng = thread_rng();
         for x in 0..self.width {
             for y in 0..self.height {
-                let alive = rng.gen_bool(0.5);
+                let alive = rng.gen_bool(initial_alive_probability);
                 self.cells[x][y] = if alive { Cell::Alive } else { Cell::Dead };
             }
         }
@@ -85,7 +85,7 @@ mod tests {
     #[test]
     fn test_initial_state() {
         let mut board = Board::new(10, 10);
-        board.set_initial_state();
+        board.set_initial_state(0.5);
         let mut has_alive = false;
         let mut has_dead = false;
 
