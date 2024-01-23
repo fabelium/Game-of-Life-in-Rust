@@ -1,1 +1,2 @@
-pub mod piston_game_view;
+#[cfg(not(target_arch = "wasm32"))]
+pub mod game_view;

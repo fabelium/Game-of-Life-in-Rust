@@ -1,19 +1,47 @@
-use crate::view::game_view_trait::GameViewTrait;
-use std::time::{Duration, Instant};
-use opengl_graphics::GlGraphics;
-use piston_window::{Events, EventSettings, OpenGL, PistonWindow, RenderArgs, RenderEvent, WindowSettings};
-use crate::game::cell::Cell;
+use crate::game::cell_state::CellState;
 use crate::game::game_state::GameState;
+use crate::view::game_view_trait::GameViewTrait;
 
-pub struct PistonGameView {
+use opengl_graphics::GlGraphics;
+use graphics::{clear, rectangle};
+use std::time::{Duration, Instant};
+use piston_window::{Events, EventSettings, OpenGL, PistonWindow, RenderArgs, RenderEvent, WindowSettings};
+
+pub struct GameView {
     game_state: GameState,
-    gl: GlGraphics,
-    window: PistonWindow,
     cell_size: f64,
     update_interval: Duration,
+    gl: GlGraphics,
+    window: PistonWindow,
 }
 
-impl GameViewTrait for PistonGameView {
+impl GameView {
+    fn render(&mut self, args: &RenderArgs) {
+        const ALIVE_COLOR: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+        const DEAD_COLOR: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+
+        self.gl.draw(args.viewport(), |context, graphics| {
+            clear(DEAD_COLOR, graphics);
+
+            for (x, row) in self.game_state.board.cells.iter().enumerate() {
+                for (y, cell) in row.iter().enumerate() {
+                    let square = rectangle::square(x as f64 * self.cell_size, y as f64 * self.cell_size, self.cell_size);
+                    let color = match cell {
+                        CellState::Alive => ALIVE_COLOR,
+                        CellState::Dead => DEAD_COLOR,
+                    };
+                    rectangle(color, square, context.transform, graphics);
+                }
+            }
+        });
+    }
+
+    fn update(&mut self) {
+        self.game_state.update();
+    }
+}
+
+impl GameViewTrait for GameView {
     fn new(game_state: GameState, cell_size: f64, update_interval_ms: u64) -> Self {
         let opengl = OpenGL::V3_2;
 
@@ -30,17 +58,16 @@ impl GameViewTrait for PistonGameView {
 
         Self {
             game_state,
-            gl: GlGraphics::new(opengl),
-            window,
             cell_size,
             update_interval: Duration::from_millis(update_interval_ms),
+            gl: GlGraphics::new(opengl),
+            window,
         }
     }
 
     fn init(&mut self) -> Result<(), String> {
         let mut events = Events::new(EventSettings::new());
         let mut last_update = Instant::now();
-
 
         while let Some(e) = events.next(&mut self.window) {
             if let Some(r) = e.render_args() {
@@ -53,31 +80,5 @@ impl GameViewTrait for PistonGameView {
             }
         }
         Ok(())
-    }
-
-    fn render(&mut self, args: &RenderArgs) {
-        use graphics::{clear, rectangle};
-
-        const ALIVE_COLOR: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
-        const DEAD_COLOR: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
-
-        self.gl.draw(args.viewport(), |context, graphics| {
-            clear(DEAD_COLOR, graphics);
-
-            for (x, row) in self.game_state.board.cells.iter().enumerate() {
-                for (y, cell) in row.iter().enumerate() {
-                    let square = rectangle::square(x as f64 * self.cell_size, y as f64 * self.cell_size, self.cell_size);
-                    let color = match cell {
-                        Cell::Alive => ALIVE_COLOR,
-                        Cell::Dead => DEAD_COLOR,
-                    };
-                    rectangle(color, square, context.transform, graphics);
-                }
-            }
-        });
-    }
-
-    fn update(&mut self) {
-        self.game_state.update();
     }
 }

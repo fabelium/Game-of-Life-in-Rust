@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Game of Life</title>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script type="module">
+    import init from './assets/game_of_life.js';
+
+    async function run() {
+        await init();
+    }
+
+    run();
+</script>
+</body>
+</html>

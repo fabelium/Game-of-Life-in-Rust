@@ -1,5 +1,5 @@
 [package]
-name = "game_of_live"
+name = "game_of_life"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,6 +7,21 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
+wasm-bindgen = "0.2.90"
+
+web-sys = { version = "0.3.67", features = ["HtmlCanvasElement", "CanvasRenderingContext2d", "Window", "Document", "Performance"] }
+
+[dependencies.getrandom]
+version = "0.2.12"
+features = ["js"]
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 piston_window = "0.131.0"
 piston2d-graphics = "0.44.0"
 piston2d-opengl_graphics = "0.84.0"
+
+
+
+
+
+

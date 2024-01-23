@@ -6,12 +6,17 @@ This repository contains an implementation of the famous Conway's Game of Life, 
 The Game of Life is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning its evolution is determined by its initial state, requiring no further input during the game.
 
 ## How It Works
-In the Game of Life, each cell in a two-dimensional grid can be in one of two states: alive or dead. The state of each cell changes in each turn of the game according to a set of simple rules related to the number of living neighbors.
+The game involves a grid where each cell is either alive or dead. The state of each cell changes per turn based on simple rules involving living neighbors.
 
-This project implements these rules and provides a basic visualization of the game board.
+This implementation not only follows these rules but also visualizes the game board.
 
 ## Modular Design
-The project is divided into two main components: GameState for handling the game logic, and GameView for managing the rendering. GameState contains the core rules and state of the game, while GameView is focused on presenting this state to the user.
+The project is split into two main modules:
+
+- **GameState**: Manages game logic, encapsulating the core rules and game state
+
+- **View**:Handles the rendering, with different implementations for various platforms in the `view` directory, supporting environments from desktops (with libraries like *Piston*) to web browsers (via *WebAssembly*).
+
 
 ## Technologies Used
 - Rust
@@ -19,29 +24,54 @@ The project is divided into two main components: GameState for handling the game
 ## Installation and Execution
 
 ### Prerequisites
-Before you can run this project, you need to have Rust and Cargo (Rust's package manager) installed on your machine. You can download them from [the Rust website](https://www.rust-lang.org/tools/install).
+
+- Rust and Cargo from [Rust website](https://www.rust-lang.org/tools/install).
+- For local server: [Node.js and npm](https://nodejs.org/) (for `http-server`).
+
+Before you can run this project, you need to have Rust and Cargo (Rust's package manager) installed on your machine. You can download them from .
 
 ### Cloning the Repository
-First, clone the repository to your local machine:
 
 ```
-git clone https://github.com/fabelium/Game-of-Life-in-Rust.git
-cd Game-of-Life-in-Rust
+ git clone https://github.com/fabelium/Game-of-Life-in-Rust.git
+ cd Game-of-Life-in-Rust
 ```
 
 ### Running the Game
 
-To run the game, use the following command from the root of the project:
+Execute in the project's root:
 
 ```
 cargo run
 ```
 
-This will compile the project and start the game. You should see the game's output in your terminal.
+### Compiling for WebAssembly
+
+To run the game in a web browser, you first need to compile it to WebAssembly (Wasm) and then serve it using a web server.
+
+1. Build the project:
+
+    ````
+    cargo build --target wasm32-unknown-unknown --release
+    wasm-bindgen target/wasm32-unknown-unknown/release/game_of_life.wasm --out-dir ./wasm/assets --target web
+    ````
+   The first command compiles the Rust code into a WebAssembly (**.wasm**) file, optimized for web browser execution.
+
+   The second command uses `wasm-bindgen` to generate the necessary JavaScript files for loading the **.wasm** file. It also copies the generated **.wasm** file into the `./wasm/assets` folder, making it accessible from the browser:
+
+
+2. Serve with a web server:
+
+    ````
+    cd wasm
+    npx http-server
+    ````
+
+3. Open the provided URL in your browser (usually http://localhost:8080).
 
 ## Contributions
-Contributions are welcome, especially those that improve code efficiency or introduce new features.
+We welcome contributions, especially for code efficiency and new features.
 
 ## License
-This project is licensed under the GNU General Public License (GPL) - see the LICENSE file for details.
+Licensed under the GNU General Public License (GPL)
 
