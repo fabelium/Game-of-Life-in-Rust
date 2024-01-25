@@ -32,10 +32,15 @@ jobs:
         run: |           
           rustup target add wasm32-unknown-unknown
 
+      - name: Install wasm-bindgen-cli
+        run: cargo install wasm-bindgen-cli
+
       - name: Build WASM
-        run: |
-          cargo build
+        run: |          
           cargo build --target wasm32-unknown-unknown --release
+          
+      - name: Build assets
+        run: |
           wasm-bindgen target/wasm32-unknown-unknown/release/game_of_life.wasm --out-dir ./wasm/assets --target web
 
   # Deployment job
