@@ -34,6 +34,7 @@ jobs:
 
       - name: Build WASM
         run: |
+          cargo build
           cargo build --target wasm32-unknown-unknown --release
           wasm-bindgen target/wasm32-unknown-unknown/release/game_of_life.wasm --out-dir ./wasm/assets --target web
 
