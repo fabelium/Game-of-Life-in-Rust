@@ -28,12 +28,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Rust and Wasm target
-        run: | 
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-          source $HOME/.cargo/env
-          rustup target add wasm32-unknown-unknown
-
       - name: Build WASM
         run: |
           cargo build --target wasm32-unknown-unknown --release
