@@ -39,9 +39,9 @@ jobs:
         run: |          
           cargo build --target wasm32-unknown-unknown --release
           
-      - name: Build assets
-        run: |
-          wasm-bindgen target/wasm32-unknown-unknown/release/game_of_life.wasm --out-dir ./wasm/assets --target web
+   #   - name: Build assets
+   #     run: |
+   #       wasm-bindgen target/wasm32-unknown-unknown/release/game_of_life.wasm --out-dir ./wasm/assets --target web
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
