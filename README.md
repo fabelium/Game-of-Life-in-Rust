@@ -5,6 +5,8 @@ This repository contains an implementation of the famous Conway's Game of Life, 
 
 The Game of Life is a cellular automaton devised by the British mathematician John Horton Conway in 1970. It is a zero-player game, meaning its evolution is determined by its initial state, requiring no further input during the game.
 
+You can [play the game in your browser here](https://fabelium.github.io/Game-of-Life-in-Rust/) via WebAssembly.
+
 ## How It Works
 The game involves a grid where each cell is either alive or dead. The state of each cell changes per turn based on simple rules involving living neighbors.
 
@@ -49,7 +51,14 @@ cargo run
 
 To run the game in a web browser, you first need to compile it to WebAssembly (Wasm) and then serve it using a web server.
 
-1. Build the project:
+1. Before compiling for WebAssembly, make sure to add the target and install `wasm-bindgen-cli`:
+
+    ```
+    rustup target add wasm32-unknown-unknown
+    cargo install wasm-bindgen-cli
+    ```
+
+2. Build the project:
 
     ````
     cargo build --target wasm32-unknown-unknown --release
@@ -60,14 +69,14 @@ To run the game in a web browser, you first need to compile it to WebAssembly (W
    The second command uses `wasm-bindgen` to generate the necessary JavaScript files for loading the **.wasm** file. It also copies the generated **.wasm** file into the `./wasm/assets` folder, making it accessible from the browser:
 
 
-2. Serve with a web server:
+3. Serve with a web server:
 
     ````
     cd wasm
     npx http-server
     ````
 
-3. Open the provided URL in your browser (usually http://localhost:8080).
+4. Open the provided URL in your browser (usually http://localhost:8080).
 
 ## Contributions
 We welcome contributions, especially for code efficiency and new features.
