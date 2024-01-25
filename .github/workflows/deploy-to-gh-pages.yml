@@ -29,8 +29,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Wasm target
-        run: |           
-          rustup target add wasm32-unknown-unknown
+        run: rustup target add wasm32-unknown-unknown
 
       #- name: Install wasm-bindgen-cli
       #  run: cargo install wasm-bindgen-cli
@@ -47,8 +46,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: |
-            wasm/*
+          path: ./wasm
 
   # Deployment job
   deploy:
