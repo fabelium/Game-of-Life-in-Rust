@@ -47,7 +47,7 @@
                         const backup = canvas.cloneNode(true);
                         const parentElement = canvas.parentElement;
                         parentElement.removeChild(canvas);
-                        load_pattern_in_rust('./game/patterns/' + pattern_filename);
+                        load_pattern_in_rust('./patterns/' + pattern_filename);
                         parentElement.appendChild(backup);
                     }
 
