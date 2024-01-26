@@ -16,3 +16,5 @@ Cargo.lock
 /wasm/node_modules/*
 /wasm/assets/*
 /gh-pages/game/*
+!/game/patterns/
+!/game/patterns/**
