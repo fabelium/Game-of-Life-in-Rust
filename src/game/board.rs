@@ -6,21 +6,21 @@ use rand::{Rng, thread_rng};
 
 #[derive(Clone)]
 pub struct Board {
-    pub width: usize,
-    pub height: usize,
+    pub grid_width: usize,
+    pub grid_height: usize,
     pub cells: Vec<Vec<CellState>>,
 }
 
 impl Board {
-    pub fn new(width: usize, height: usize) -> Board {
-        let cells = vec![vec![CellState::Dead; height]; width];
-        Board { width, height, cells }
+    pub fn new(grid_width: usize, grid_height: usize) -> Board {
+        let cells = vec![vec![CellState::Dead; grid_height]; grid_width];
+        Board { grid_width, grid_height, cells }
     }
 
     pub fn set_initial_state(&mut self, initial_alive_probability: f64) {
         let mut rng = thread_rng();
-        for x in 0..self.width {
-            for y in 0..self.height {
+        for x in 0..self.grid_width {
+            for y in 0..self.grid_height {
                 if rng.gen_bool(initial_alive_probability) {
                     self.set_cell(x, y, CellState::Alive);
                 }
@@ -28,24 +28,39 @@ impl Board {
         }
     }
 
+    pub fn add_pattern(&mut self, pattern: Vec<String>) {
+        let pattern_width = pattern[0].len();
+        let pattern_height = pattern.len();
+
+        let start_x = (self.cells.len() - pattern_width) / 2;
+        let start_y = (self.cells[0].len() - pattern_height) / 2;
+
+        for (y, row) in pattern.iter().enumerate() {
+            for (x, char) in row.chars().enumerate() {
+                if char == 'X' {
+                    self.set_cell(start_x + x, start_y + y, CellState::Alive);
+                }
+            }
+        }
+    }
+
     fn get_cell(&self, x: usize, y: usize) -> CellState {
-        if x < self.width && y < self.height {
+        if x < self.grid_width && y < self.grid_height {
             return self.cells[x][y];
         }
         CellState::Dead
     }
 
     pub fn set_cell(&mut self, x: usize, y: usize, cell_state: CellState) {
-        if x < self.width && y < self.height {
+        if x < self.grid_width && y < self.grid_height {
             self.cells[x][y] = cell_state;
         }
     }
 
     pub fn update(&mut self) {
         let mut new_state = self.cells.clone();
-
-        for y in 0..self.height {
-            for x in 0..self.width {
+        for x in 0..self.grid_width {
+            for y in 0..self.grid_height {
                 let alive_neighbors = self.count_alive_neighbors(x, y);
                 let new_cell = evolve_cell(self.get_cell(x, y), alive_neighbors);
                 new_state[x][y] = new_cell;
@@ -59,10 +74,10 @@ impl Board {
         if x < 0 || y < 0 {
             return false;
         }
-        if x >= self.width as isize {
+        if x >= self.grid_width as isize {
             return false;
         }
-        if x >= self.height as isize {
+        if y >= self.grid_height as isize {
             return false;
         }
         true
@@ -112,8 +127,8 @@ mod tests {
     #[test]
     fn test_new_board() {
         let board = Board::new(10, 20);
-        assert_eq!(board.width, 10);
-        assert_eq!(board.height, 20);
+        assert_eq!(board.grid_width, 10);
+        assert_eq!(board.grid_height, 20);
         assert_eq!(board.cells.len(), 10);
         assert_eq!(board.cells[0].len(), 20);
     }
@@ -293,5 +308,72 @@ mod tests {
         assert_eq!(board.get_cell(2, 1), CellState::Alive);
         assert_eq!(board.get_cell(2, 3), CellState::Alive);
         assert_eq!(board.get_cell(3, 2), CellState::Alive);
+    }
+
+
+    #[test]
+    fn test_coord_inside_board() {
+         let board = Board::new(20, 10);
+        assert!(board.is_coord_in_board(5, 5));
+    }
+
+    #[test]
+    fn test_coord_on_edge() {
+         let board = Board::new(20, 10);
+        assert!(board.is_coord_in_board(19, 9));
+    }
+
+    #[test]
+    fn test_coord_outside_board() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(20, 10));
+    }
+
+    #[test]
+    fn test_negative_coord() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(-1, -1));
+    }
+
+    #[test]
+    fn test_coord_far_outside_board() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(40, 20));
+    }
+
+    #[test]
+    fn test_x_inside_y_outside() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(5, 25));
+    }
+
+    #[test]
+    fn test_y_inside_x_outside() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(25, 5));
+    }
+
+    #[test]
+    fn test_negative_x_positive_y() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(-1, 5));
+    }
+
+    #[test]
+    fn test_positive_x_negative_y() {
+         let board = Board::new(20, 10);
+        assert!(!board.is_coord_in_board(5, -1));
+    }
+
+    #[test]
+    fn test_x_within_board_but_greater_than_height() {
+        let board = Board::new(20, 10);
+        assert!(board.is_coord_in_board(15, 5));
+    }
+
+    #[test]
+    fn test_y_within_board_but_greater_than_width() {
+        let board = Board::new(10, 20);
+        assert!(board.is_coord_in_board(5, 15));
     }
 }

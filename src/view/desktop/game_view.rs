@@ -9,7 +9,7 @@ use piston_window::{Events, EventSettings, OpenGL, PistonWindow, RenderArgs, Ren
 
 pub struct GameView {
     game_state: GameState,
-    cell_size: f64,
+    cell_size: usize,
     update_interval: Duration,
     gl: GlGraphics,
     window: PistonWindow,
@@ -25,7 +25,7 @@ impl GameView {
 
             for (x, row) in self.game_state.board.cells.iter().enumerate() {
                 for (y, cell) in row.iter().enumerate() {
-                    let square = rectangle::square(x as f64 * self.cell_size, y as f64 * self.cell_size, self.cell_size);
+                    let square = rectangle::square((x * self.cell_size) as f64, (y * self.cell_size) as f64, self.cell_size as f64);
                     let color = match cell {
                         CellState::Alive => ALIVE_COLOR,
                         CellState::Dead => DEAD_COLOR,
@@ -42,12 +42,12 @@ impl GameView {
 }
 
 impl GameViewTrait for GameView {
-    fn new(game_state: GameState, cell_size: f64, update_interval_ms: u64) -> Self {
+    fn new(game_state: GameState, cell_size: usize, update_interval_ms: usize) -> Self {
         let opengl = OpenGL::V3_2;
 
         let size = [
-            game_state.board.width as u32,
-            game_state.board.height as u32
+            (game_state.board.grid_width * cell_size) as u32,
+            (game_state.board.grid_height * cell_size) as u32
         ];
 
         let window: PistonWindow = WindowSettings::new("Game of Life", size)
@@ -59,7 +59,7 @@ impl GameViewTrait for GameView {
         Self {
             game_state,
             cell_size,
-            update_interval: Duration::from_millis(update_interval_ms),
+            update_interval: Duration::from_millis(update_interval_ms as u64),
             gl: GlGraphics::new(opengl),
             window,
         }

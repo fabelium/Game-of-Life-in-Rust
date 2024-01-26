@@ -1,25 +1,25 @@
 #[allow(dead_code)]
 pub struct Cell {
-    x: f64,
-    y: f64,
+    x: usize,
+    y: usize,
     color: String,
 }
 
 impl Cell {
 
     #[allow(dead_code)]
-    pub fn new(x: f64, y: f64, color: &str) -> Cell {
+    pub fn new(x: usize, y: usize, color: &str) -> Cell {
         let color = color.to_string();
         Self { x, y, color }
     }
 
     #[allow(dead_code)]
-    pub fn get_x(&self) -> f64 {
+    pub fn get_x(&self) -> usize {
         self.x
     }
 
     #[allow(dead_code)]
-    pub fn get_y(&self) -> f64 {
+    pub fn get_y(&self) -> usize {
         self.y
     }
 
